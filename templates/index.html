@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <div id="map"></div>
+    <script>
+        var map;
+        var marker;
+
+        // Initialize and add the map
+        function initMap() {
+            myLatlng = new google.maps.LatLng({lat: 39.8283, lng: -98.5795});
+            // The location of Us
+            var us = {lat: 39.8283, lng: -98.5795};
+            // The map, centered at Us
+            var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 4, center: us});
+
+            // load in previously made markers
+            {% for marker in markers %}
+
+                // create new latlng coordinates for marker
+                newLatLng = {lat: {{ marker["lat"] }}, lng: {{ marker["lng"]}} }
+                // create new marker
+                newmarker = new google.maps.Marker({
+                    draggable: false,
+                    position: newLatLng,
+                    map: map
+                })
+
+                // add message to new marker
+                attachMessage(newmarker, {{ marker["message"] | tojson}} )
+
+            {% endfor %}
+
+            // on click, create a marker and ask for a message
+            google.maps.event.addListener(map, 'click', function(event) {
+                var message = prompt("Add a message!");
+                marker = new google.maps.Marker({
+                    draggable: true,
+                    position: myLatlng,
+                    map: map
+                });
+
+                // attach message to marker
+                attachMessage(marker, message);
+                marker.setPosition(event.latLng);
+
+                // send message info by post to server to store in database
+                $.post("/add",
+                {
+                    "message": message,
+                    "lat": event.latLng.lat(),
+                    "lng": event.latLng.lng()
+                });
+
+            });
+
+        }
+
+        function attachMessage(marker, message) {
+            var infowindow = new google.maps.InfoWindow({
+                content: message
+            });
+            marker.addListener('click', function() {
+                infowindow.open(map, marker);
+            });
+        }
+    </script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDI7Ly1kdSWoFzKxHpKrH3QdRM9_NCVOks&callback=initMap">
+    </script>
+{% endblock %}

@@ -1,0 +1,53 @@
+html,
+body,
+header,
+#intro {
+    height: 100vh;
+}
+
+#intro {
+    background: url("https://i.imgur.com/zhzrF3K.jpg")no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-top: 30vh;
+    color: white;
+}
+
+#map {
+    height: 50vh;
+}
+
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    height: 100vh;
+
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
